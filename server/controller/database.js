@@ -19,10 +19,19 @@ const checkHist = (searchParams, callback) => {
     if(results.rows[0].exists){
 
       console.log('getting from hist')
-      client.query(`select response from searchHist where query = '${JSONsearchParams}'`)
-      .then(response => {
-        callback(null, response);
+      client.query(`select response from searchHist where query = '${JSONsearchParams}'`, (err, res)=>{
+        if(err) console.log(err);
+        var result = JSON.stringify(res.rows[0].response);
+        //console.log(res.rows[0].response);
+        console.log(result)
+        callback(null, result);
       })
+      // .then(res => {
+      //   console.log(res.json());
+      // })
+      // .then(response => {
+      //   callback(null, response);
+      // })
 
     } else {
 
