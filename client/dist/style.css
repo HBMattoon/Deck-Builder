@@ -1,0 +1,35 @@
+.cards {
+  width: 223px;
+  height: 310px;
+  margin-left: 2px;
+  border-radius: 11px;
+  border: solid rgba(1, 1, 1, 0) 2px;
+}
+.cards:hover{
+  border:solid yellow 2px;
+}
+
+body{
+  background-color: rgba(17, 9, 53, 0.753);
+}
+
+.searchBar{
+  margin-bottom: 20px;
+  border: solid black 2px;
+}
+
+.cardZone{
+  width:1165px;
+  border: solid black 2px;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: rgb(65, 64, 64)
+}
+
+#mainDisplay{
+  height:700px;
+  width: 90%;
+  margin: auto;
+  border: dotted blue 2px;
+  display: flex;
+}
