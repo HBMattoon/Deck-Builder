@@ -8,6 +8,52 @@ const client = new Client(
 
 client.connect();
 
+//generate 9char id for deck
+const idGen = () => {
+  let result = []
+  for(let x = 0; x < 9; x++){
+    result.push(String.fromCharCode(Math.floor(Math.random() * 25) + 65))
+  }
+  result = result.join('');
+  console.log('new id is: ' + result);
+  return result
+}
+
+const createDeck = (deck, cb) =>{
+  let id = idGen();
+  let JSONsearchParams = JSON.stringify(deck)
+
+  console.log(typeof id)
+  client.query(`insert into decks (owner_id, deck_list) values ('${id}', $$${JSONsearchParams}$$)`)
+  .then(()=> {
+    console.log('added to decks')
+    cb(id);
+  })
+  .catch(err => console.log(err));
+
+}
+
+// const addHist = (searchParams, results) => {
+//   let JSONsearchParams = JSON.stringify(searchParams)
+//   client.query(`insert into searchHist (query, response) values ($$${JSONsearchParams}$$, $$${results}$$)`)
+//   .then(()=> console.log('added to history'))
+//   .catch(err => console.log(err));
+// }
+
+const updateDeck = (deck, id, cb) =>{
+
+}
+
+const deleteDeck = (id, cb) =>{
+
+}
+
+const loadDeck = (id, cb) =>{
+
+}
+
+
+
 const checkHist = (searchParams, callback) => {
   let JSONsearchParams = JSON.stringify(searchParams)
   console.log('searching: ' + JSONsearchParams);
@@ -44,6 +90,9 @@ const addHist = (searchParams, results) => {
   .catch(err => console.log(err));
 }
 
+
+
 module.exports = {
-  checkHist
+  checkHist,
+  createDeck
 }
