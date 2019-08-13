@@ -35,7 +35,7 @@ body{
 }
 
 .cardDetails{
-  width: 30%;
+  width:100%;
   background: rgb(191, 188, 187);
 
   font-size: 17px;
@@ -53,4 +53,93 @@ body{
 
 .flav{
   font: italic;
+}
+
+.deckList{
+  position: relative;
+  background: black;
+  width:100%;
+  height: 60%;
+  padding:10px;
+  /* overflow-y: scroll; */
+  border-top:solid black 2px;
+}
+
+.sidebar{
+  width:30%;
+}
+
+.cardTab{
+  padding: 10px;
+  height: 85%;
+  overflow-y: scroll;
+  line-height: 1.3;
+  font-weight: 450;
+  color:  #ffe4b1;
+  font-family: SystemFont,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-size: 15px;
+}
+
+.red{
+  color:red;
+  font-weight: 550;
+}
+
+.deckListing{
+  border: solid wheat 2px;
+  margin-bottom: 5px;
+  padding-left: 14px;
+  padding-right: 14px;
+
+}
+
+img.resize {
+  margin-top: 5px;
+  height: 250px;
+  width: auto;
+}
+
+.textShadows{
+  text-shadow: 2px 2px 15px rgb(3, 3, 3), 2px 2px rgb(3, 3, 3) ;
+}
+.floatRight{
+  float: right;
+}
+
+.colorless{
+  background-color: rgb(100, 100, 100);
+}
+
+.gold{
+  background-color: rgb(158, 117, 4);
+}
+
+.mountain{
+  background-color: rgb(100, 51, 51);
+}
+
+.swamp{
+  background-color: rgb(41, 39, 39);
+}
+
+.forest{
+  background-color: rgb(32, 65, 47);
+}
+
+.plains{
+  background-color: rgb(123, 123, 108);
+}
+
+.island{
+  background-color: rgb(68, 73, 146);
+}
+
+.cardAndButtons{
+  width: 180px;
+  float: right;
+
+}
+
+.buttonZone{
+  margin: 10px;
 }
