@@ -8,10 +8,12 @@ class Display extends React.Component{
     super(props);
     this.state = {
       cardSelection: [],
-      currentCard: {'name':'choose a card!'},
+      currentCard: {
+      },
     }
     this.hoveredCard = this.hoveredCard.bind(this);
   }
+
 
 
   hoveredCard(card){
