@@ -19,7 +19,11 @@ class App extends React.Component {
 
 
   componentDidMount(){
-    // this.getCard({name:"miner's bane"});
+    this.getCard({
+      name:"",
+      'page':1,
+      'pageSize':20,
+    });
   }
 
   getCard(query){
@@ -53,6 +57,7 @@ class App extends React.Component {
       <div>
         <SearchBar getCard={this.getCard}/>
         <Display cards={this.state.searchResult}/>
+
       </div>
     );
   }
