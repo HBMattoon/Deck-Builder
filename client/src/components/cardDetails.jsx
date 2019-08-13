@@ -8,21 +8,20 @@ class CardDetails extends React.Component{
     this.state = {
       currentCard: {name: 'cool'},
     }
-    this.test = this.test.bind(this);
+    //this.test = this.test.bind(this);
     this.getMana = this.getMana.bind(this);
     this.getPT = this.getPT.bind(this);
     this.getText = this.getText.bind(this);
     // this.parseText = this.parseText.bind(this);
   }
 
-  test(card){
-    console.log('very cool test');
-    this.setState({currentCard: card});
-  }
+  // test(card){
+  //   console.log('very cool test');
+  //   this.setState({currentCard: card});
+  // }
 
   setIcon(){
     let test = `ssIcon ss ss-${this.props.card.set.toLowerCase()} ss-grad ss-fw ss-2x ss-${this.props.card.rarity.toLowerCase()}`;
-    // console.log(test);
     return test
   }
 
@@ -95,7 +94,7 @@ class CardDetails extends React.Component{
   }
   getName(){
     if(this.props.card.name){
-      return <div className="cardName">Name: {this.props.card.name}</div>;
+      return <div className="cardName">Name: {this.props.card.name} </div>;
     } else {
       return <h1>choose a card!</h1>
     }
@@ -117,25 +116,32 @@ class CardDetails extends React.Component{
     }
   }
 
+  update(){
+    if(this.props.card){
+      this.props.add(this.props.card);
+    }
+  }
+
   render(){
     return(
       <div className="cardDetails">
-        {this.getName()}
-        {this.getMana()}
-        {this.getType()}
-        {this.getText()}
-        {this.getPT()}
-        {this.getFlavor()}
-        {this.getRarity()}
-        {this.getSet()}
+        <div className="cardAndButtons">
+          <button onClick={()=>{this.update()}}>gimme!</button>
+          <img className="resize" src={this.props.card.imageUrl} alt={this.props.card.name}></img>
+        </div>
+        <div className="info">
+          {this.getName()}
+          {this.getMana()}
+          {this.getType()}
+          {this.getText()}
+          {this.getPT()}
+          {this.getFlavor()}
+          {this.getRarity()}
+          {this.getSet()}
+        </div>
       </div>
     )
   }
-
-
-
-
-
 }
 
 export default CardDetails;
