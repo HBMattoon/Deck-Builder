@@ -2,7 +2,7 @@ const express =  require('express');
 const path = require('path');
 const bodyparser = require('body-parser');
 // const { findCard } = require('./controller/mtgFinder.js')
-const { checkHist } = require('./controller/database.js')
+const { checkHist, createDeck } = require('./controller/database.js')
 
 
 const port = 3000;
@@ -26,7 +26,19 @@ app.get('/api/mtg',(req, res) =>{
   })
 });
 
-app.post('/api',(req, res) =>{
+app.get('/api/deck',(req, res) => {
+
+})
+
+app.post('/api/deck',(req, res) =>{
+  console.log('got post request');
+  let queryParams = req.query.params;
+  //queryParams = JSON.parse(queryParams);
+  createDeck(queryParams,(id)=>{
+    console.log('returning id: ' + id);
+    //id = JSON.stringify({"id":id})
+    res.json(id).end();
+  })
 
 });
 
