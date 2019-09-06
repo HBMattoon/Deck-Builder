@@ -104,7 +104,7 @@ class Deck extends React.Component {
           <button onClick={()=> this.props.saveDeck()}>Save Deck</button>
           <button>Load Deck</button>
           <label>
-            <input type="text" id="deckId" value="Deck id"></input>
+            <input type="text" id="deckId" value={this.props.currentId}></input>
           </label>
           <button className="floatRight">Delete Deck</button>
         </div>

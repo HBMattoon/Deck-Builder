@@ -36,17 +36,17 @@ class SearchBar extends React.Component {
   render(){
     return(
       <div className="searchBar">
-            <label>Search By:
-              <select onChange={this.updateSearchBy} value={this.state.value}>
+            <label className="textShadows">Search By:
+              <select className="marLeft5" onChange={this.updateSearchBy} value={this.state.value}>
                 <option value="name">Name</option>
                 <option value="subtypes">Subtype</option>
                 <option value="text">Text</option>
                 <option value="colors">Color</option>
               </select>
 
-              <input type="text" id="card"></input>
+              <input className="marLeft5" type="text" id="card"></input>
             </label>
-            <button onClick={() => this.props.getCard.call(null, this.createQuery())}>Search</button>
+            <button className="marLeft5" onClick={() => this.props.getCard.call(null, this.createQuery())}>Search</button>
       </div>
     )
   }

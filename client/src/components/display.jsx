@@ -9,13 +9,17 @@ class Display extends React.Component{
     super(props);
     this.state = {
       cardCollection: [],
-      currentCard: {
-      },
+      currentCard: {},
+      currentId: 'save deck',
     }
     this.hoveredCard = this.hoveredCard.bind(this);
     this.addToCollection = this.addToCollection.bind(this);
     this.saveDeck = this.saveDeck.bind(this);
   }
+
+  // componentDidMount(){
+  //   this.setState({currentCard: this.props.cards[0]})
+  // }
 
   //save new deck, or update old one
   saveDeck(id){
@@ -29,9 +33,15 @@ class Display extends React.Component{
       // let query = {"deck": collection}
       let jsonQuery = JSON.stringify(collection);
       console.log(jsonQuery);
-      fetch(`/api/deck/`,{method: 'POST', body: JSON.stringify(collection)})
+      fetch(`/api/deck/`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(collection)}) //JSON.stringify(collection)
       .then(res => res.json())
       .then(res => {
+        this.setState({currentId: JSON.stringify(res)})
         console.log('look what i got! ' + JSON.stringify(res));
       })
       .catch(err => console.log( err));
@@ -74,7 +84,7 @@ class Display extends React.Component{
         <CardDisplay cards={this.props.cards} hoveredCard={this.hoveredCard}/>
         <div className="sidebar">
           <CardDetails add={this.addToCollection} card={this.state.currentCard}/>
-          <Deck saveDeck={this.saveDeck} currentCard={this.hoveredCard} collection={this.state.cardCollection}/>
+          <Deck currentId={this.state.currentId} saveDeck={this.saveDeck} currentCard={this.hoveredCard} collection={this.state.cardCollection}/>
         </div>
       </div>
     )
