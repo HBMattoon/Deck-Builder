@@ -12,18 +12,30 @@ const findCard = (searchParams, callback) => {
   .catch(err => callback(err, null))
 }
 
+//basic version for single variable
+const queryTranslator = (query) => {
+  if(query.name){
+    console.log(`getting name: ${query.name}`);
+    return query.name;
+  } else if(query.subtypes){
+    console.log(`getting type: ${query.subtypes}`)
+    return (`t%3A${query.subtypes}`)
+  }
 
-
+}
+//c%3Awhite+cmc%3D1
 
 //TODO need to creat query generator/translater function based off of search terms
 const newFindCard = (searchTerms, cb) => {
 
-  console.log('pong')
+  console.log(searchTerms);
 
-  fetch(`https://api.scryfall.com/cards/search?q=c%3Awhite+cmc%3D1`)
+  let searchURL = `https://api.scryfall.com/cards/search?q=${queryTranslator(searchTerms)}`
+  console.log(searchURL);
+  fetch(searchURL)
   .then(res => res.json())
   .then(res => {
-  //  console.log(res);
+    console.log(res);
     //TODO all results should be gotten here and passed as a batch to callback
 
 
