@@ -37,6 +37,7 @@ class App extends React.Component {
     fetch(`/api/mtg/?params=${jsonQuery}`)
     .then(cards => cards.json())
     .then(cards => {
+      console.log(cards);
       if(cards === []){
         console.log('no results TODO')
         query = [{name:'No Card Matches'}];
@@ -44,7 +45,7 @@ class App extends React.Component {
       console.log('is array? ' + Array.isArray(cards));
       this.setState({
         'currentSearch':query,
-        'searchResult':cards
+        'searchResult':cards.data.slice(0, 20)
       });
       //console.log(cards[0].text)
     })
