@@ -18,14 +18,17 @@ class CardDisplay extends React.Component {
   }
 
 
-
+  //TODO should render double faced cards
   render(){
     return(
       <div className="cardZone">
         {this.props.cards.map((card)=>{
           console.log(card)
-          if(card.image_uris.small){
+          if(card.image_uris){
+
             return <img onClick={()=>this.props.hoveredCard(card)} className="cards" key={key++} src={distractionMode ? cardBG : card.image_uris.large} alt={card.name}></img>
+          } else {
+            console.log('!')
           }
         })}
       </div>
