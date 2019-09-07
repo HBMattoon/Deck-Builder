@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const { findCard } = require('./mtgFinder.js');
+const { findCard, newFindCard } = require('./mtgFinder.js');
 const client = new Client(
   {
     database: 'deckbuilder',
@@ -53,7 +53,8 @@ const loadDeck = (id, cb) =>{
 }
 
 
-
+//TODO use HIST to get specific searches if more general searches have been done
+//ie: if 'cats' is in hist then use hist to find 'black cats'
 const checkHist = (searchParams, callback) => {
   let JSONsearchParams = JSON.stringify(searchParams)
   console.log('searching: ' + JSONsearchParams);
@@ -71,7 +72,8 @@ const checkHist = (searchParams, callback) => {
     } else {
 
       console.log('getting from api')
-      findCard(searchParams, (err, result) => {
+      //using new find card function using scryfall instad of mtg-api
+      newFindCard(searchParams, (err, result) => {
         if(err) console.log(err);
         addHist(searchParams, result);
         callback(null, result);

@@ -13,24 +13,9 @@ const findCard = (searchParams, callback) => {
 }
 
 
-//card queue in order to prevent api overuse
 
 
-
-// let testArr = [];
-
-// const getNext = (cb) => {
-//   if(testArr.length > 0){
-//     setTimeout(() => {
-//       console.log(testArr.pop())
-//       getNext(cb);
-//     }, 1000);
-//   } else {
-//     console.log('theEnd')
-//     cb()
-//   }
-// }
-
+//TODO need to creat query generator/translater function based off of search terms
 const newFindCard = (searchTerms, cb) => {
 
   console.log('pong')
@@ -38,10 +23,17 @@ const newFindCard = (searchTerms, cb) => {
   fetch(`https://api.scryfall.com/cards/search?q=c%3Awhite+cmc%3D1`)
   .then(res => res.json())
   .then(res => {
-    console.log(res);
-    cb('test');
+  //  console.log(res);
+    //TODO all results should be gotten here and passed as a batch to callback
+
+
+
+
+
+    res = JSON.stringify(res);
+    cb(null, res);
   })
-  .catch(err => {console.log('error!: ' + err)});
+  .catch(err => cb(err,null));
 }
 
 module.exports = {

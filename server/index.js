@@ -13,7 +13,7 @@ const port = 3000;
 const app = express();
 
 const apiLimiter = rateLimit({
-  windowMs: 100, // 15 minutes
+  windowMs: 100, // 100ms
   max: 1
 });
 
@@ -39,24 +39,6 @@ app.get('/api/deck',(req, res) => {
 
 })
 
-
-
-// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-// see https://expressjs.com/en/guide/behind-proxies.html
-// app.set('trust proxy', 1);
-
-
-// only apply to requests that begin with /api/
-
-
-
-let test = 1;
-app.get('/api/test', (req, res) => {
-  test = test + 1;
-  newFindCard(test,(val) => {
-    res.send(val).end();
-  });
-})
 
 app.post('/api/deck',(req, res) =>{
   console.log('got post request');
