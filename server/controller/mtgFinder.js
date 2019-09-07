@@ -20,6 +20,10 @@ const queryTranslator = (query) => {
   } else if(query.subtypes){
     console.log(`getting type: ${query.subtypes}`)
     return (`t%3A${query.subtypes}`)
+  } else if(query.text){
+    return (`o%3A${query.text}`);
+  } else if(query.color){
+    return (`t%3A${query.subtypes}`)
   }
 
 }
