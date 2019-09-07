@@ -8,26 +8,22 @@ class CardDetails extends React.Component{
     this.state = {
       currentCard: {name: 'cool'},
     }
-    //this.test = this.test.bind(this);
+
     this.getMana = this.getMana.bind(this);
     this.getPT = this.getPT.bind(this);
     this.getText = this.getText.bind(this);
     // this.parseText = this.parseText.bind(this);
   }
 
-  // test(card){
-  //   console.log('very cool test');
-  //   this.setState({currentCard: card});
-  // }
-
+  //TODO fix icon rarity from being in same shap as last icon with same rarity
   setIcon(){
     let test = `ssIcon ss ss-${this.props.card.set.toLowerCase()} ss-grad ss-fw ss-2x ss-${this.props.card.rarity.toLowerCase()}`;
     return test
   }
 
   manaParse(){
-    let manaStr = this.props.card.manaCost
-    manaStr = manaStr.slice(1, manaStr.length-1);
+    let manaStr = this.props.card.mana_cost
+    manaStr = manaStr.slice(1, manaStr.length-1); //remove curly braces at the ends
     let manaArr = manaStr.split('}{')
     manaArr = manaArr.map((val)=>val.toLowerCase().replace('/',''));
     console.log(manaArr)
@@ -37,7 +33,7 @@ class CardDetails extends React.Component{
   }
 
   getMana(){
-    if(this.props.card.manaCost){
+    if(this.props.card.mana_cost){
       return <div>Mana Cost: {this.manaParse()}</div>;
     }
   }
@@ -79,17 +75,17 @@ class CardDetails extends React.Component{
   // }
 
   getText(){
-    if(this.props.card.text){
+    if(this.props.card.oracle_text){
 
       // //return <div>Text: {JSON.stringify(this.parseText())}</div>;
       // return <div>Text: {`test text ${<i key={key++} className={`ms ms-g ms-cost ms-shadow`}></i>}`}</div>;
-      return <div><br/>Text: {this.props.card.text}</div>;
+      return <div><br/>Text: {this.props.card.oracle_text}</div>;
     }
   }
 
   getFlavor(){
-    if(this.props.card.flavor){
-      return <div className="flav"><br/>Flavor Text: {this.props.card.flavor}</div>
+    if(this.props.card.flavor_text){
+      return <div className="flav"><br/>Flavor Text: {this.props.card.flavor_text}</div>
     }
   }
   getName(){
@@ -101,8 +97,8 @@ class CardDetails extends React.Component{
   }
 
   getType(){
-    if(this.props.card.type){
-      return <div>Type: {this.props.card.type}</div>;
+    if(this.props.card.type_line){
+      return <div>Type: {this.props.card.type_line}</div>;
     }
   }
   getRarity(){
@@ -116,9 +112,18 @@ class CardDetails extends React.Component{
     }
   }
 
+  //todo what does this do?
   update(){
     if(this.props.card){
       this.props.add(this.props.card);
+    }
+  }
+
+  getImage(){
+    if(this.props.card.image_uris){
+      return(
+        <img className="resize" src={this.props.card.image_uris.large} alt={this.props.card.name}></img>
+      )
     }
   }
 
@@ -127,7 +132,7 @@ class CardDetails extends React.Component{
       <div className="cardDetails">
         <div className="cardAndButtons">
           <button onClick={()=>{this.update()}}>gimme!</button>
-          <img className="resize" src={this.props.card.imageUrl} alt={this.props.card.name}></img>
+          {this.getImage()}
         </div>
         <div className="info">
           {this.getName()}
