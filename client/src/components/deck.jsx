@@ -19,9 +19,10 @@ class Deck extends React.Component {
   //   this.setState({cards: newCards})
   // }
 
+  //TODO
   manaParse(card){
-    if(card.manaCost){
-      let manaStr = card.manaCost
+    if(card.mana_cost){
+      let manaStr = card.mana_cost
       manaStr = manaStr.slice(1, manaStr.length-1);
       let manaArr = manaStr.split('}{')
       manaArr = manaArr.map((val)=>val.toLowerCase().replace('/',''));
@@ -32,8 +33,10 @@ class Deck extends React.Component {
     }
   }
 
-  getCardAmount(amount, superType){
-    if(amount > 4 && superType[0] !== 'Basic'){
+  getCardAmount(amount, type){
+    let superType = type.split(' ')[0];
+    console.log(superType);
+    if(amount > 4 && superType !== 'Basic'){
       //too many
       return <span className="red textShadows">{amount}x</span>
     } else {
@@ -42,26 +45,28 @@ class Deck extends React.Component {
   }
 
   getColor(card){
+
     if(card.colors){
+      console.log(card.colors)
       if(card.colors.length > 1){
         return 'gold'
       }
       if(card.colors.length === 0){
         return 'colorless'
       }
-      if(card.colors[0] === 'Green'){
+      if(card.colors[0] === 'G'){
         return 'forest'
       }
-      if(card.colors[0] === 'Blue'){
+      if(card.colors[0] === 'U'){
         return 'island';
       }
-      if(card.colors[0] === 'Red'){
+      if(card.colors[0] === 'R'){
         return 'mountain';
       }
-      if(card.colors[0] === 'White'){
+      if(card.colors[0] === 'W'){
         return 'plains';
       }
-      if(card.colors[0] === 'Black'){
+      if(card.colors[0] === 'B'){
         return 'swamp';
       }
     }
@@ -87,8 +92,8 @@ class Deck extends React.Component {
         {nonDupCollection.map((card)=>{
           return (<div onClick={()=>this.props.currentCard(card)} className={`deckListing ${this.getColor(card)}`}>
             <div>{this.manaParse(card)}</div>
-            <div className="textShadows">{this.getCardAmount(cardCounts[card.name], card.supertypes)} {card.name}</div>
-            <div className="textShadows">{card.type}</div>
+            <div className="textShadows">{this.getCardAmount(cardCounts[card.name], card.type_line)} {card.name}</div>
+            <div className="textShadows">{card.type_line}</div>
 
           </div>)
         })}
