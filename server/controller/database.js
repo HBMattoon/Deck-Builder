@@ -6,7 +6,8 @@ const client = new Client(
   }
 )
 
-client.connect();
+client.connect()
+.catch(err => console.log('error connecting: ', err))
 
 //generate 9char id for deck
 const idGen = () => {
@@ -68,6 +69,7 @@ const checkHist = (searchParams, callback) => {
         var result = JSON.stringify(res.rows[0].response);
         callback(null, result);
       })
+      //.catch(err => console.log('error in checkHist: ', err))
 
     } else {
 
