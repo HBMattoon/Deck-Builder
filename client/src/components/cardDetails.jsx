@@ -33,7 +33,7 @@ class CardDetails extends React.Component{
       return val;
     });
     //manaArr.push('/n');
-    console.log('manaArr is: ',manaArr);
+    //console.log('manaArr is: ',manaArr);
     return(
       manaArr.map((val)=> <i key={key++} className={`ms ms-${val} ms-cost ms-shadow`}></i>)
     )
@@ -67,8 +67,16 @@ class CardDetails extends React.Component{
         current.push(arr.shift())
         result.push(current.join(''));
         current = [];
+      } else if(arr[0] === '(') {
+        result.push(current.join(''));
+        current = [];
+        current.push(arr.shift())
+      } else if(arr[0] === ')') {
+        current.push(arr.shift())
+        result.push(current.join(''));
+        current = [];
       } else if(arr[0] === '\n'){
-        console.log('test!')
+        //console.log('test!')
         result.push(current.join(''));
         current = [];
         //current.push(arr.shift())
@@ -86,8 +94,9 @@ class CardDetails extends React.Component{
       if(item[0] === '{'){
         return this.manaParse(item);
       } else if(item[0] === '\n'){
-
         return <br/>
+      } else if(item[0] === '(' || item[item.length - 1] === ')'){
+        return <span className="oracleRules">{item}</span>
       }else {
         return <span>{item}</span>
       }
@@ -95,12 +104,16 @@ class CardDetails extends React.Component{
     //
   }
 
+  getBreak(){
+    return <br/>
+  }
+
   getText(){
     if(this.props.card.oracle_text){
-      return this.parseCardText(this.props.card.oracle_text);
-      // //return <div>Text: {JSON.stringify(this.parseText())}</div>;
-      // return <div>Text: {`test text ${<i key={key++} className={`ms ms-g ms-cost ms-shadow`}></i>}`}</div>;
-      //return <div><br/>Text: {this.props.card.oracle_text}</div>;
+      let result = this.parseCardText(this.props.card.oracle_text);
+      // console.log(result);
+      result.unshift(<br/>);
+      return result;
     }
   }
 

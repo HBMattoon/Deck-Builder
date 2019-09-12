@@ -117,8 +117,9 @@ img.resize {
 }
 
 .colorless{
-  background-color: rgb(100, 100, 100);
+  background-color: #99aab9;
 }
+
 
 .gold{
   background-color: rgb(158, 117, 4);
@@ -156,3 +157,8 @@ img.resize {
 .marLeft5{
   margin-left: 5px
 }
+
+.oracleRules{
+  font-style: italic;
+}
+
