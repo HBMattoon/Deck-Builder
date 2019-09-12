@@ -21,12 +21,19 @@ class CardDetails extends React.Component{
     return test
   }
 
-  manaParse(){
-    let manaStr = this.props.card.mana_cost
+  manaParse(manaStr = this.props.card.mana_cost){
+    // let manaStr = this.props.card.mana_cost
     manaStr = manaStr.slice(1, manaStr.length-1); //remove curly braces at the ends
     let manaArr = manaStr.split('}{')
-    manaArr = manaArr.map((val)=>val.toLowerCase().replace('/',''));
-    console.log(manaArr)
+    manaArr = manaArr.map((val)=>{
+      val = val.toLowerCase().replace('/','')
+      if(val === 't'){
+        val = 'tap'
+      }
+      return val;
+    });
+    //manaArr.push('/n');
+    console.log('manaArr is: ',manaArr);
     return(
       manaArr.map((val)=> <i key={key++} className={`ms ms-${val} ms-cost ms-shadow`}></i>)
     )
@@ -44,42 +51,56 @@ class CardDetails extends React.Component{
     }
   }
 
-  // parseText(){
-  //   let text = this.props.card.text;
-  //   let textArr = text.split('');
-  //   let currentVal = [];
-  //   let target = '';
-  //   let adding = 0;
-  //   for(let x = 0; x < textArr.length; x++){
+  //hello{1}{2}, my name is {r2} test
+  parseCardText(text){
+    let arr = text.split('');
+    let result = [];
+    let current = [];
+    let i = 0;
+    while(arr.length > 0){
+      //console.log('does ↵ = ',JSON.stringify(arr[0]), '? ', arr[0] === '\n');
+      if(arr[0] === '{' ){
+        result.push(current.join(''));
+        current = [];
+        current.push(arr.shift())
+      } else if(arr[0] === '}') {
+        current.push(arr.shift())
+        result.push(current.join(''));
+        current = [];
+      } else if(arr[0] === '\n'){
+        console.log('test!')
+        result.push(current.join(''));
+        current = [];
+        //current.push(arr.shift())
+        result.push(arr.shift());
+        current = [];
+      } else {
+        current.push(arr.shift())
+      }
+    }
+    result.push(current.join(''));
 
-  //     //end reached
-  //     if(textArr[x] === '}'){
-  //       currentVal.push(textArr[x])
-  //       adding = 0;
-  //       target = currentVal.join('');
-  //       text = text.replace(target, <i key={key++} className={`ms ms-g ms-cost ms-shadow`}></i> )
-  //       currentVal = [];
-  //     }
-  //     //adding contents
-  //     else if(adding === 1){
-  //       currentVal.push(textArr[x])
-  //     }
-  //     //begin adding
-  //     else if(textArr[x] === '{'){
-  //       currentVal.push(textArr[x])
-  //       adding = 1;
-  //     }
-  //   }
+    console.log('result is: ',result);
+    return result.map(item => {
 
-  //   return text
-  // }
+      if(item[0] === '{'){
+        return this.manaParse(item);
+      } else if(item[0] === '\n'){
+
+        return <br/>
+      }else {
+        return <span>{item}</span>
+      }
+    })
+    //
+  }
 
   getText(){
     if(this.props.card.oracle_text){
-
+      return this.parseCardText(this.props.card.oracle_text);
       // //return <div>Text: {JSON.stringify(this.parseText())}</div>;
       // return <div>Text: {`test text ${<i key={key++} className={`ms ms-g ms-cost ms-shadow`}></i>}`}</div>;
-      return <div><br/>Text: {this.props.card.oracle_text}</div>;
+      //return <div><br/>Text: {this.props.card.oracle_text}</div>;
     }
   }
 
