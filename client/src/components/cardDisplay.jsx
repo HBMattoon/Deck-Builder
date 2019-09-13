@@ -1,7 +1,12 @@
 import React from 'react';
 
 let cardBG = 'https://gamepedia.cursecdn.com/mtgsalvation_gamepedia/0/07/Cardback_yellow.jpg?version=bb6894599b5370bc95db2af9c1f6dbf9';
-let distractionMode = true;
+//
+
+//if true, does not show cards in card zone, else card faces are shown
+let distractionMode = false;
+
+
 let key = 0;
 class CardDisplay extends React.Component {
   constructor(props){

@@ -47,7 +47,7 @@ class CardDetails extends React.Component{
 
   getPT(){
     if(this.props.card.power){
-      return <div>P/T: {this.props.card.power}/{this.props.card.toughness}</div>;
+      return <div className="marginTop10">P/T: {this.props.card.power}/{this.props.card.toughness}</div>;
     }
   }
 
@@ -104,15 +104,12 @@ class CardDetails extends React.Component{
     //
   }
 
-  getBreak(){
-    return <br/>
-  }
-
   getText(){
     if(this.props.card.oracle_text){
       let result = this.parseCardText(this.props.card.oracle_text);
       // console.log(result);
       result.unshift(<br/>);
+
       return result;
     }
   }

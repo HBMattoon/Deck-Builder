@@ -20,7 +20,7 @@ class App extends React.Component {
 
   componentDidMount(){
     this.getCard({
-      name:"",
+      name:"a",
       'page':1,
       'pageSize':20,
     });
