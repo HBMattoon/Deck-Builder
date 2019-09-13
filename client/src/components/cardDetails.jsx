@@ -116,7 +116,18 @@ class CardDetails extends React.Component{
 
   getFlavor(){
     if(this.props.card.flavor_text){
-      return <div className="flav"><br/>Flavor Text: {this.props.card.flavor_text}</div>
+      return(
+        <div>
+          <br />
+          <span>Flavor Text: </span>
+          <span className="oracleRules">
+            {this.props.card.flavor_text}
+          </span>
+        </div>
+      )
+
+
+
     }
   }
   getName(){

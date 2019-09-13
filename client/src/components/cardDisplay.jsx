@@ -1,13 +1,6 @@
 import React from 'react';
+import Card  from './Card.jsx';
 
-let cardBG = 'https://gamepedia.cursecdn.com/mtgsalvation_gamepedia/0/07/Cardback_yellow.jpg?version=bb6894599b5370bc95db2af9c1f6dbf9';
-//
-
-//if true, does not show cards in card zone, else card faces are shown
-let distractionMode = false;
-
-
-let key = 0;
 class CardDisplay extends React.Component {
   constructor(props){
     super(props)
@@ -22,19 +15,11 @@ class CardDisplay extends React.Component {
     }
   }
 
-
-  //TODO should render double faced cards
   render(){
     return(
       <div className="cardZone">
         {this.props.cards.map((card)=>{
-          console.log(card)
-          if(card.image_uris){
-
-            return <img onClick={()=>this.props.hoveredCard(card)} className="cards" key={key++} src={distractionMode ? cardBG : card.image_uris.large} alt={card.name}></img>
-          } else {
-            console.log('!')
-          }
+          return <Card hoveredCard={this.props.hoveredCard} card={card} />
         })}
       </div>
     )

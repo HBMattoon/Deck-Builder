@@ -45,7 +45,8 @@ class App extends React.Component {
       console.log('is array? ' + Array.isArray(cards));
       this.setState({
         'currentSearch':query,
-        'searchResult':cards.data.slice(0, 20)
+        'searchResult':cards.data.slice(0, 25)
+        //page size = 25
       });
       //console.log(cards[0].text)
     })
