@@ -9,32 +9,58 @@
   constructor(props){
     super(props);
     this.state = {
-      card: undefined,
-      image: cardBG,
+      card: {},
+      offset: -30
     }
   }
 
-  componentDidMount(){
-    this.getCardImage(this.props.card);
-  }
+  // componentDidMount(){
+  //   this.setState({offset: 0});
+  // }
 
   getCardImage(card){
+    //let card = this.props.card;
     let image_uri = '';
     let name = '';
-    if(card.card_faces){
-      image_uri = card.card_faces[0].image_uris.large
+    if(card.card_faces && !card.image_uris){
+      if(card.card_faces[0].image_uris ){
+        image_uri = card.card_faces[0].image_uris.large
+      } else {
+        console.log('the hell is this: ', card.card_faces[0])
+      }
       name = card.card_faces[0].name
     } else {
       image_uri = card.image_uris.large
       name = card.name
     }
-    this.setState({image: image_uri});
+    //this.setState({card: card})
+    //console.log('state is: ', this.state.card);
+    return image_uri;
+  }
+
+  slideButton(val){
+    let buttonTransform = {
+      transform: `translateY(${val}px)`,
+      // border: 'yellow solid 1px'
+     }
+     return buttonTransform;
+  }
+
+  showFlip(){
+    this.setState({offset: 0})
+  }
+  hideFlip(){
+    this.setState({offset: -30})
   }
 
 
-
   render(){
-    return <img onClick={()=>this.props.hoveredCard(this.props.card)} className="cards" key={key++} src={distractionMode ? cardBG : this.state.image} alt={this.props.card.name}></img>
+    return (
+      <div key={this.props.keyval} className="test" onMouseEnter={() => this.showFlip()} onMouseLeave={() => this.hideFlip()}>
+        <div style={this.slideButton(this.state.offset)} className="button">test</div>
+        <img onClick={() => this.props.hoveredCard(this.props.card)} className="cards" src={distractionMode ? cardBG : this.getCardImage(this.props.card)} alt={this.props.card.name}></img>
+      </div>
+    )
   }
  }
 

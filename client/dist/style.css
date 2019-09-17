@@ -9,6 +9,28 @@
   border:solid yellow 2px;
 }
 
+.card_image{
+  width: inherit;
+  height: inherit;
+  overflow: hidden;
+}
+
+.test{
+  display: inline-flex;
+  /* border: solid orangered 1px; */
+  position: relative;
+  overflow: hidden;
+}
+
+.button{
+  display: inherit;
+  position: absolute;
+  background: #99aab9;
+  /* transform: translateY(-30px); */
+  width: 30px;
+  height: 30px;
+}
+
 body{
   background-color: rgba(17, 9, 53, 0.753);
 }
@@ -164,5 +186,9 @@ img.resize {
 
 .marginTop10{
   margin-top: 10px;
+}
+
+.drop_down_button{
+  position: fixed;
 }
 

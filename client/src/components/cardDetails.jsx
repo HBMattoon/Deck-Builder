@@ -88,7 +88,7 @@ class CardDetails extends React.Component{
     }
     result.push(current.join(''));
 
-    console.log('result is: ',result);
+    //console.log('result is: ',result);
     return result.map(item => {
 
       if(item[0] === '{'){

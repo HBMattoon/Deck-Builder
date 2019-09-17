@@ -1,10 +1,15 @@
 import React from 'react';
 import Card  from './Card.jsx';
 
+let key = 0;
+
 class CardDisplay extends React.Component {
   constructor(props){
     super(props)
-    this.state = {}
+    this.state = {
+      cards: ['test'],
+    }
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -18,8 +23,10 @@ class CardDisplay extends React.Component {
   render(){
     return(
       <div className="cardZone">
+
         {this.props.cards.map((card)=>{
-          return <Card hoveredCard={this.props.hoveredCard} card={card} />
+          //console.log(card);
+          return <Card keyval={key++} hoveredCard={this.props.hoveredCard} card={card} />
         })}
       </div>
     )
