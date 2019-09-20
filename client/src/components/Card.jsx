@@ -3,7 +3,7 @@
  let cardBG = 'https://gamepedia.cursecdn.com/mtgsalvation_gamepedia/0/07/Cardback_yellow.jpg?version=bb6894599b5370bc95db2af9c1f6dbf9';
  let key = 0;
  let distractionMode = false;
- let face = 0;
+ let face = 1;
  //if true, does not show cards in card zone, else card faces are shown
 
  class Card extends React.Component {
@@ -13,15 +13,16 @@
       card: undefined,
       //cardFace: undefined,
       image: undefined,
-      offset: -30
+      offset: -30,
+      mergeImage: undefined,
+      face: 0,
     }
   }
 
   componentDidMount(){
-    //this.getCardState();
-    //console.log('new mount')
     this.setState({card: this.props.card});
     this.updateCardImage(this.props.card, 0);
+    this.fetchMerge(this.props.card);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,43 +31,53 @@
       this.setState({
         card: nextProps.card
       });
-
       this.updateCardImage(nextProps.card, 0);
+      this.fetchMerge(nextProps.card);
+    }
+  }
+
+  fetchMerge(card){
+    console.log('test for', card.name)
+    if(card.all_parts){
+      console.log('component for ', card.name, ' is: ', card.all_parts[0].component);
+      if(card.all_parts[0].component === 'meld_part'){
+        fetch(card.all_parts[2].uri)
+        .then(res => res.json())
+        .then(res => {
+          res = res.image_uris.large
+          console.log('res is: ',res);
+          this.setState({mergeImage: res});
+        })
+      }
     }
   }
 
 
   updateCardImage(card, face){
-    //let card = this.props.card;
     let image_uri = '';
-    //let name = '';
-    if(card.card_faces && !card.image_uris){
+    if(this.state.mergeImage){
+      //check if merged
+      if(face === 1){
+        image_uri = this.state.mergeImage;
+      } else {
+        image_uri = card.image_uris.large
+      }
+    } else if(card.card_faces && !card.image_uris){
+      //check if twofaced
       if(card.card_faces[face].image_uris ){
         image_uri = card.card_faces[face].image_uris.large
       } else {
-        console.log('what this: ', card.card_faces[face])
+        console.log('what this: ', card.card_faces[face]); //catch any issues.testing purposes only
       }
-      //name = card.card_faces[0].name
     } else {
       image_uri = card.image_uris.large
-      //name = card.name
     }
-    //return image_uri;
-    //console.log('getting image!')
-    this.setState({image: image_uri});
+    this.setState({image: image_uri, face: face});
   }
-
-  // getCardState(){
-  //   let currentCard = this.props.card;
-  //   if(currentCard.card_faces !== undefined){
-  //     this.setState({cardFace: currentCard.card_faces[0]})
-  //   }
-  // }
 
   slideButton(val){
     let buttonTransform = {
       transform: `translateY(${val}px)`,
-      // border: 'yellow solid 1px'
      }
      return buttonTransform;
   }
@@ -78,29 +89,21 @@
     this.setState({offset: -30})
   }
 
+
+  //todo use state instead of face
   flipFace(){
-    if(face === 0){
-      face = 1;
+    console.log('in flipping face merge image is: ', this.state.mergeImage)
+    console.log('face is: ', this.state.face)
+    if(this.state.face === 0){
+      let face = 1;
+      console.log('ping')
       this.updateCardImage(this.state.card, face);
     } else {
-      face = 0;
+      let face = 0;
+      console.log('pong')
       this.updateCardImage(this.state.card, face);
     }
   }
-
-
-  // currentCard(){
-
-
-  //   console.log('test getting called!')
-  //   if(this.state.cardFace){
-  //     console.log('state exists, returning', this.state.cardFace)
-  //     return this.state.cardFace;
-  //   } else {
-  //     console.log('returning props', this.props.card)
-  //     return this.props.card;
-  //   }  //return this.state.card ? this.state.card : this.props.card
-  // }
 
 
   render(){
