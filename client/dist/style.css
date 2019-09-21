@@ -29,6 +29,7 @@
   /* transform: translateY(-30px); */
   width: 30px;
   height: 30px;
+  transition: 0.25s;
 }
 
 body{
@@ -189,6 +190,8 @@ img.resize {
 }
 
 .drop_down_button{
-  position: fixed;
+  border: solid green 1px;
+  width: inherit;
+  height: inherit;
 }
 
