@@ -12,7 +12,7 @@ class Display extends React.Component{
       currentCard: {},
       currentId: 'save deck',
     }
-    this.hoveredCard = this.hoveredCard.bind(this);
+    this.clickedCard = this.clickedCard.bind(this);
     this.addToCollection = this.addToCollection.bind(this);
     this.saveDeck = this.saveDeck.bind(this);
   }
@@ -60,7 +60,7 @@ class Display extends React.Component{
   }
 
 
-  hoveredCard(card){
+  clickedCard(card){
     //console.log(card.name);
     currentCard = card;
     console.log(currentCard.name)
@@ -80,11 +80,16 @@ class Display extends React.Component{
   render(){
     return(
       <div id="mainDisplay">
-        {console.log(this.props.cards[0])}
-        <CardDisplay cards={this.props.cards} hoveredCard={this.hoveredCard}/>
+        {/* {console.log(this.props.cards[0])} */}
+
+        <CardDisplay cards={this.props.cards} clickedCard={this.clickedCard}/>
+
         <div className="sidebar">
+
           <CardDetails add={this.addToCollection} card={this.state.currentCard}/>
-          <Deck currentId={this.state.currentId} saveDeck={this.saveDeck} currentCard={this.hoveredCard} collection={this.state.cardCollection}/>
+
+          <Deck currentId={this.state.currentId} saveDeck={this.saveDeck} currentCard={this.clickedCard} collection={this.state.cardCollection}/>
+
         </div>
       </div>
     )

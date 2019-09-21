@@ -114,12 +114,13 @@
             flip
           </div>
         </div>
-        <img onClick={() => this.props.hoveredCard(this.state.card)} className="cards" src={distractionMode ? cardBG : this.state.image}></img>
+        <img onClick={() => this.props.clickedCard(this.state.card)} className="cards" src={distractionMode ? cardBG : this.state.image}></img>
       </div>
     )
   }
  }
 
 export default Card;
+
 
 
