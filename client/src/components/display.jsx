@@ -63,7 +63,7 @@ class Display extends React.Component{
   clickedCard(card){
     //console.log(card.name);
     currentCard = card;
-    console.log(currentCard.name)
+    //console.log(currentCard)
     //CardDetails.prototype.test(card);
     this.setState({'currentCard': card});
   }

@@ -11,11 +11,11 @@
     super(props);
     this.state = {
       card: undefined,
-      //cardFace: undefined,
       image: undefined,
       offset: -30,
       mergeImage: undefined,
       face: 0,
+      needButton: false,
     }
   }
 
@@ -27,7 +27,6 @@
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
-      //console.log('updated mount')
       this.setState({
         card: nextProps.card
       });
@@ -37,15 +36,12 @@
   }
 
   fetchMerge(card){
-    console.log('test for', card.name)
     if(card.all_parts){
-      console.log('component for ', card.name, ' is: ', card.all_parts[0].component);
       if(card.all_parts[0].component === 'meld_part'){
         fetch(card.all_parts[2].uri)
         .then(res => res.json())
         .then(res => {
           res = res.image_uris.large
-          console.log('res is: ',res);
           this.setState({mergeImage: res});
         })
       }
@@ -55,24 +51,25 @@
 
   updateCardImage(card, face){
     let image_uri = '';
+    let needButton = false;
     if(this.state.mergeImage){
       //check if merged
+      needButton = true;
       if(face === 1){
         image_uri = this.state.mergeImage;
       } else {
         image_uri = card.image_uris.large
       }
     } else if(card.card_faces && !card.image_uris){
-      //check if twofaced
+      //check if duel faced card
       if(card.card_faces[face].image_uris ){
         image_uri = card.card_faces[face].image_uris.large
-      } else {
-        console.log('what this: ', card.card_faces[face]); //catch any issues.testing purposes only
+        needButton = true;
       }
     } else {
       image_uri = card.image_uris.large
     }
-    this.setState({image: image_uri, face: face});
+    this.setState({image: image_uri, face: face, needButton: needButton});
   }
 
   slideButton(val){
@@ -89,19 +86,25 @@
     this.setState({offset: -30})
   }
 
-
-  //todo use state instead of face
   flipFace(){
-    console.log('in flipping face merge image is: ', this.state.mergeImage)
-    console.log('face is: ', this.state.face)
     if(this.state.face === 0){
       let face = 1;
-      console.log('ping')
       this.updateCardImage(this.state.card, face);
     } else {
       let face = 0;
-      console.log('pong')
       this.updateCardImage(this.state.card, face);
+    }
+  }
+
+  getButton(){
+    if(this.state.needButton){
+      return(
+        <div style={this.slideButton(this.state.offset)} className="button">
+          <div className="drop_down_button" onClick={() => this.flipFace()}>
+            flip
+          </div>
+        </div>
+      )
     }
   }
 
@@ -109,17 +112,13 @@
   render(){
     return (
       <div key={this.props.keyval} className="test" onMouseEnter={() => this.showFlip()} onMouseLeave={() => this.hideFlip()}>
-        <div style={this.slideButton(this.state.offset)} className="button">
-          <div className="drop_down_button" onClick={() => this.flipFace()}>
-            flip
-          </div>
-        </div>
+        {this.getButton()}
         <img onClick={() => this.props.clickedCard(this.state.card)} className="cards" src={distractionMode ? cardBG : this.state.image}></img>
       </div>
     )
   }
  }
-
+//
 export default Card;
 
 
