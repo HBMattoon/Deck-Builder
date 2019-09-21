@@ -21,8 +21,8 @@
 
   componentDidMount(){
     this.setState({card: this.props.card});
-    this.updateCardImage(this.props.card, 0);
     this.fetchMerge(this.props.card);
+    this.updateCardImage(this.props.card, 0);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,19 +30,20 @@
       this.setState({
         card: nextProps.card
       });
-      this.updateCardImage(nextProps.card, 0);
       this.fetchMerge(nextProps.card);
+      this.updateCardImage(nextProps.card, 0);
     }
   }
 
   fetchMerge(card){
+    let needButton = 'merge';
     if(card.all_parts){
       if(card.all_parts[0].component === 'meld_part'){
         fetch(card.all_parts[2].uri)
         .then(res => res.json())
         .then(res => {
           res = res.image_uris.large
-          this.setState({mergeImage: res});
+          this.setState({mergeImage: res, needButton: needButton});
         })
       }
     }
@@ -50,37 +51,37 @@
 
 
   updateCardImage(card, face){
-    let image_uri = '';
+    let image = '';
     let needButton = false;
     if(this.state.mergeImage){
       //check if merged
-      needButton = true;
+      needButton = 'merge';
       if(face === 1){
-        image_uri = this.state.mergeImage;
+        image = this.state.mergeImage;
       } else {
-        image_uri = card.image_uris.large
+        image = card.image_uris.large
       }
     } else if(card.card_faces && !card.image_uris){
       //check if duel faced card
       if(card.card_faces[face].image_uris ){
-        image_uri = card.card_faces[face].image_uris.large
-        needButton = true;
+        image = card.card_faces[face].image_uris.large
+        needButton = 'flip';
       }
     } else {
-      image_uri = card.image_uris.large
+      image = card.image_uris.large
     }
-    this.setState({image: image_uri, face: face, needButton: needButton});
+    this.setState({image, face, needButton});
   }
 
   slideButton(val){
     let buttonTransform = {
-      transform: `translateY(${val}px)`,
+      transform: `translateY(${val}px) translateX(4px)`,
      }
      return buttonTransform;
   }
 
   showFlip(){
-    this.setState({offset: 0})
+    this.setState({offset: 2})
   }
   hideFlip(){
     this.setState({offset: -30})
@@ -96,12 +97,12 @@
     }
   }
 
-  getButton(){
-    if(this.state.needButton){
+  getButton(needButton){
+    if(needButton){
       return(
         <div style={this.slideButton(this.state.offset)} className="button">
           <div className="drop_down_button" onClick={() => this.flipFace()}>
-            flip
+            {needButton}
           </div>
         </div>
       )
@@ -112,13 +113,13 @@
   render(){
     return (
       <div key={this.props.keyval} className="test" onMouseEnter={() => this.showFlip()} onMouseLeave={() => this.hideFlip()}>
-        {this.getButton()}
+        {this.getButton(this.state.needButton)}
         <img onClick={() => this.props.clickedCard(this.state.card)} className="cards" src={distractionMode ? cardBG : this.state.image}></img>
       </div>
     )
   }
  }
-//
+
 export default Card;
 
 

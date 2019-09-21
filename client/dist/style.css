@@ -27,7 +27,8 @@
   position: absolute;
   background: #99aab9;
   /* transform: translateY(-30px); */
-  width: 30px;
+  transform: translateX(3px);
+  width: 40px;
   height: 30px;
   transition: 0.25s;
 }
@@ -190,7 +191,7 @@ img.resize {
 }
 
 .drop_down_button{
-  border: solid green 1px;
+  /* border: solid green 1px; */
   width: inherit;
   height: inherit;
 }
