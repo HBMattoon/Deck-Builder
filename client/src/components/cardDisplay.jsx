@@ -26,7 +26,7 @@ class CardDisplay extends React.Component {
 
         {this.props.cards.map((card)=>{
           //console.log(card);
-          return <Card keyval={key++} clickedCard={this.props.clickedCard} card={card} />
+          return <Card key={key++} clickedCard={this.props.clickedCard} card={card} />
         })}
       </div>
     )
