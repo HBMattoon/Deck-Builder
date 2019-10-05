@@ -1,12 +1,35 @@
 import React from 'react'
+import {manaParse, parseCardText} from '../tools/cardParse.jsx'
+
 
 let key = 0;
+
+let options = [
+  ['image', 'Card Image'],
+  ['name','Name'],
+  ['mana','Mana Cost'],
+  ['text','Oracle Text'],
+  ['pt','Power & Toughness'],
+  ['flavor','Flavor Text'],
+  ['rarity','Card Rarity'],
+  ['set','Card Set'],
+];
+
+
 
 class CardDetails extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       currentCard: {name: 'cool'},
+      viewOptions: false,
+      name: true,
+      mana: true,
+      text: true,
+      pt: true,
+      flavor: true,
+      rarity: true,
+      set: true,
     }
 
     this.getMana = this.getMana.bind(this);
@@ -21,27 +44,25 @@ class CardDetails extends React.Component{
     return test
   }
 
-  manaParse(manaStr = this.props.card.mana_cost){
-    // let manaStr = this.props.card.mana_cost
-    manaStr = manaStr.slice(1, manaStr.length-1); //remove curly braces at the ends
-    let manaArr = manaStr.split('}{')
-    manaArr = manaArr.map((val)=>{
-      val = val.toLowerCase().replace('/','')
-      if(val === 't'){
-        val = 'tap'
-      }
-      return val;
-    });
-    //manaArr.push('/n');
-    //console.log('manaArr is: ',manaArr);
-    return(
-      manaArr.map((val)=> <i key={key++} className={`ms ms-${val} ms-cost ms-shadow`}></i>)
-    )
-  }
+  // manaParse(manaStr = this.props.card.mana_cost){
+  //   // let manaStr = this.props.card.mana_cost
+  //   manaStr = manaStr.slice(1, manaStr.length-1); //remove curly braces at the ends
+  //   let manaArr = manaStr.split('}{')
+  //   manaArr = manaArr.map((val)=>{
+  //     val = val.toLowerCase().replace('/','')
+  //     if(val === 't'){
+  //       val = 'tap'
+  //     }
+  //     return val;
+  //   });
+  //   return(
+  //     manaArr.map((val)=> <i key={key++} className={`ms ms-${val} ms-cost ms-shadow`}></i>)
+  //   )
+  // }
 
   getMana(){
     if(this.props.card.mana_cost){
-      return <div>Mana Cost: {this.manaParse()}</div>;
+      return <div>Mana Cost: {parseCardText(this.props.card.mana_cost)}</div>;
     }
   }
 
@@ -51,62 +72,62 @@ class CardDetails extends React.Component{
     }
   }
 
-  //hello{1}{2}, my name is {r2} test
-  parseCardText(text){
-    let arr = text.split('');
-    let result = [];
-    let current = [];
-    let i = 0;
-    while(arr.length > 0){
-      //console.log('does ↵ = ',JSON.stringify(arr[0]), '? ', arr[0] === '\n');
-      if(arr[0] === '{' ){
-        result.push(current.join(''));
-        current = [];
-        current.push(arr.shift())
-      } else if(arr[0] === '}') {
-        current.push(arr.shift())
-        result.push(current.join(''));
-        current = [];
-      } else if(arr[0] === '(') {
-        result.push(current.join(''));
-        current = [];
-        current.push(arr.shift())
-      } else if(arr[0] === ')') {
-        current.push(arr.shift())
-        result.push(current.join(''));
-        current = [];
-      } else if(arr[0] === '\n'){
-        //console.log('test!')
-        result.push(current.join(''));
-        current = [];
-        //current.push(arr.shift())
-        result.push(arr.shift());
-        current = [];
-      } else {
-        current.push(arr.shift())
-      }
-    }
-    result.push(current.join(''));
+  // //hello{1}{2}, my name is {r2} test
+  // parseCardText(text){
+  //   let arr = text.split('');
+  //   let result = [];
+  //   let current = [];
+  //   let i = 0;
+  //   while(arr.length > 0){
+  //     //console.log('does ↵ = ',JSON.stringify(arr[0]), '? ', arr[0] === '\n');
+  //     if(arr[0] === '{' ){
+  //       result.push(current.join(''));
+  //       current = [];
+  //       current.push(arr.shift())
+  //     } else if(arr[0] === '}') {
+  //       current.push(arr.shift())
+  //       result.push(current.join(''));
+  //       current = [];
+  //     } else if(arr[0] === '(') {
+  //       result.push(current.join(''));
+  //       current = [];
+  //       current.push(arr.shift())
+  //     } else if(arr[0] === ')') {
+  //       current.push(arr.shift())
+  //       result.push(current.join(''));
+  //       current = [];
+  //     } else if(arr[0] === '\n'){
+  //       //console.log('test!')
+  //       result.push(current.join(''));
+  //       current = [];
+  //       //current.push(arr.shift())
+  //       result.push(arr.shift());
+  //       current = [];
+  //     } else {
+  //       current.push(arr.shift())
+  //     }
+  //   }
+  //   result.push(current.join(''));
 
-    //console.log('result is: ',result);
-    return result.map(item => {
+  //   //console.log('result is: ',result);
+  //   return result.map(item => {
 
-      if(item[0] === '{'){
-        return this.manaParse(item);
-      } else if(item[0] === '\n'){
-        return <br/>
-      } else if(item[0] === '(' || item[item.length - 1] === ')'){
-        return <span className="oracleRules">{item}</span>
-      }else {
-        return <span>{item}</span>
-      }
-    })
-    //
-  }
+  //     if(item[0] === '{'){
+  //       return this.manaParse(item);
+  //     } else if(item[0] === '\n'){
+  //       return <br/>
+  //     } else if(item[0] === '(' || item[item.length - 1] === ')'){
+  //       return <span className="oracleRules">{item}</span>
+  //     }else {
+  //       return <span>{item}</span>
+  //     }
+  //   })
+  //   //
+  // }
 
   getText(){
     if(this.props.card.oracle_text){
-      let result = this.parseCardText(this.props.card.oracle_text);
+      let result = parseCardText(this.props.card.oracle_text);
       // console.log(result);
       result.unshift(<br/>);
 
@@ -131,11 +152,16 @@ class CardDetails extends React.Component{
     }
   }
   getName(){
-    if(this.props.card.name){
-      return <div className="cardName">Name: {this.props.card.name} </div>;
-    } else {
-      return <h1>choose a card!</h1>
+    //console.log(options)
+    if(this.state.name){
+      if(this.props.card.name){
+        console.log('returning cardName')
+        return <div className="cardName">Name: {this.props.card.name} </div>;
+      } else {
+        return <h1>choose a card!</h1>
+      }
     }
+
   }
 
   getType(){
@@ -169,11 +195,10 @@ class CardDetails extends React.Component{
     }
   }
 
-  render(){
+  showInfo(){
     return(
-      <div className="cardDetails">
+      <div>
         <div className="cardAndButtons">
-          <button onClick={()=>{this.update()}}>gimme!</button>
           {this.getImage()}
         </div>
         <div className="info">
@@ -185,6 +210,39 @@ class CardDetails extends React.Component{
           {this.getFlavor()}
           {this.getRarity()}
           {this.getSet()}
+        </div>
+      </div>
+    )
+  }
+
+  showOptions(){
+    let key = 1;
+    return options.map((option) => {
+      let statePayload = {};
+      statePayload[option[0]] = !this.state[option[0]];
+      console.log
+      return(
+        <div key={key++} className="options">
+          <input type='checkbox' onChange={()=> {console.log(statePayload);
+            this.setState(statePayload)}} checked={this.state[option[0]]}></input>
+           <span>{option[1]}</span>
+           <br/>
+        </div>
+      )
+    })
+  }
+
+  render(){
+    return(
+
+      <div className="cardDetailsZone">
+        <div className="cardDetailOptions">
+            <button onClick={()=>{this.update()}}>Add</button>
+            <button>Remove</button>
+            <button onClick={()=> this.setState({viewOptions: !this.state.viewOptions})}>Display Options</button>
+        </div>
+        <div className="cardDetails">
+          {this.state.viewOptions ? this.showOptions() : this.showInfo()}
         </div>
       </div>
     )
