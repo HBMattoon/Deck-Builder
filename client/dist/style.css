@@ -78,13 +78,17 @@ body{
   height: 35%;
 }
 
+.cardDetailOptions{
+  height: 7%;
+}
+
 .cardDetails{
   width:100%;
   background: rgb(191, 188, 187);
 
   font-size: 17px;
-  padding: 10px;
-  height: 90%;
+  padding: 0px 10px 0px 10px;
+  height: 92%;
   overflow-y: scroll;
   line-height: 1.3;
   font-weight: 450;
@@ -94,10 +98,6 @@ body{
 .ssIcon{
   color:white;
 }
-
-/* .flav{
-  font: italic;
-} */
 
 .deckList{
   position: relative;
@@ -111,6 +111,7 @@ body{
 
 .sidebar{
   width:30%;
+  height: 100%;
 }
 
 .cardTab{
@@ -208,3 +209,10 @@ img.resize {
   font-weight: 450;
 }
 
+.paddingTop5{
+  padding-top: 5px;
+}
+
+.boldWord{
+  font-weight: bold;
+}
