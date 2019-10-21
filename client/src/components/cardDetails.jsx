@@ -22,7 +22,7 @@ class CardDetails extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      currentCard: {name: 'cool'},
+      currentFace: {name: 'cool'},
       face: 0,
       viewOptions: false,
       image: true,
@@ -46,52 +46,104 @@ class CardDetails extends React.Component{
     this.myRef.current.scrollTo(0,0);
   }
 
-  addCard(){
-    if(this.props.card){
-      this.props.add(this.props.card);
+  getCardFace(card){
+    // check if normal card
+    // card.card
+    let layout = card.layout;
+    if(card.layout === 'transform'){
+      console.log(card)
+      // console.log('returning card face at index: ', this.state.face);
+      return card.card_faces[this.state.face]
+
+    // } else if (card.layout === 'split') {
+    //   //todo
+    // } else if (card.layout === 'flip') {
+      //todo
+    }else {
+      // console.log('in cardDetails.getCardFace()')
+      return card;
     }
   }
 
-  //TODO fix icon rarity from being in same shap as last icon with same rarity
+  addCard(){
+    if(this.props.card){
+      this.props.add(this.props.card);
+      console.log('this is card state', this.state.currentCard)
+      // this.props.add(this.state.currentCard);
+    }
+  }
+
   setIcon(){
     let test = `ssIcon ss ss-${this.props.card.set.toLowerCase()} ss-grad ss-fw ss-2x ss-${this.props.card.rarity.toLowerCase()}`;
     return test
   }
 
   getMana(){
-    let card = this.props.card;
+    let card = this.getCardFace(this.props.card);
     //console.log(this.props.card.card_face)
-    if(card.card_faces && !card.image_uris){
-      card = card.card_faces[this.state.face];
-      console.log('twofaced card!')
-    }
+    // if(card.card_faces && !card.image_uris){
+    //   card = card.card_faces[this.state.face];
+    //   console.log('twofaced card!')
+    // }
     if(card.mana_cost && this.state.mana){
       return <div><span className="boldWord">Mana Cost: </span> {parseCardText(card.mana_cost)}</div>;
     }
   }
 
   getPT(){
-    if(this.props.card.power && this.state.pt){
-      return <div className="marginTop10"><span className="boldWord">P/T:</span> {this.props.card.power}/{this.props.card.toughness}</div>;
+    let pf1, pf2, tf1, tf2;
+    let card = this.getCardFace(this.props.card);
+
+    if(card.power && this.state.pt){
+      if(card.layout === 'flip' && card.card_faces[0].toughness){
+        pf1 = card.card_faces[0].power;
+        pf2 = card.card_faces[1].power;
+        tf1 = card.card_faces[0].toughness;
+        tf2 = card.card_faces[1].toughness;
+      } else {
+        pf1 = card.power;
+        tf1 = card.toughness;
+      }
+
+      return <div className="marginTop10"><span className="boldWord">P/T:</span>{pf2 ? ` ${pf1}/${tf1} // ${pf2}/${tf2}`:` ${pf1}/${tf1}`}</div>;
     }
   }
 
   getText(){
-    if(this.props.card.oracle_text && this.state.text){
-      let result = parseCardText(this.props.card.oracle_text);
-      result.unshift(<br/>);
-      return result;
+    let card = this.getCardFace(this.props.card);
+    if(this.state.text){
+      if(card.layout && (card.layout === 'flip' || card.layout === 'split')){
+        let text = [card.card_faces[0].oracle_text, card.card_faces[1].oracle_text];
+        text = text.map((text) => {
+          let parsedText = parseCardText(text);
+          parsedText.unshift(<br/>)
+          parsedText.push(<br/>);
+          parsedText.push(<span>{'//'}</span>);
+          // console.log('parsed text resykts:', parsedText);
+          return parsedText;
+        })
+
+        text[1].pop();
+        return text;
+      } else {
+        if(card.oracle_text){
+          let result = parseCardText(card.oracle_text);
+          result.unshift(<br/>);
+          return result;
+        }
+      }
     }
   }
 
   getFlavor(){
-    if(this.props.card.flavor_text && this.state.flavor){
+    let card = this.getCardFace(this.props.card);
+    if(card.flavor_text && this.state.flavor){
       return(
         <div>
           <br />
           <span className="boldWord">Flavor Text: </span>
           <span className="oracleRules">
-            {this.props.card.flavor_text}
+            {card.flavor_text}
           </span>
         </div>
       )
@@ -99,35 +151,40 @@ class CardDetails extends React.Component{
   }
 
   getName(){
-    if(this.props.card.name && this.state.name){
-      console.log(this.props.card)
-      return <div className="cardName"><span className="boldWord">Name:</span> {this.props.card.name} </div>;
+    let card = this.getCardFace(this.props.card);
+    if(card.name && this.state.name){
+      console.log(card)
+      return <div className="cardName"><span className="boldWord">Name:</span> {card.name} </div>;
     }
   }
 
   getType(){
-    if(this.props.card.type_line && this.state.type){
-      return <div><span className="boldWord">Type:</span> {this.props.card.type_line}</div>;
+    let card = this.getCardFace(this.props.card);
+    if(card.type_line && this.state.type){
+      return <div><span className="boldWord">Type:</span> {card.type_line}</div>;
     }
   }
 
   getRarity(){
-    if(this.props.card.rarity && this.state.rarity){
-      return <div><br/><span className="boldWord">Rarity:</span> {this.props.card.rarity}</div>;
+    let card = this.props.card;
+    if(card.rarity && this.state.rarity){
+      return <div><br/><span className="boldWord">Rarity:</span> {card.rarity}</div>;
     }
   }
 
   getSet(){
-    if(this.props.card.set && this.state.set){
-      return <div><span className="boldWord">Set:</span> <i className={this.setIcon()}></i> [{this.props.card.set}] {this.props.card.setName} </div>;
+    let card = this.props.card;
+    if(card.set && this.state.set){
+      return <div><span className="boldWord">Set:</span> <i className={this.setIcon()}></i> [{card.set}] {card.setName} </div>;
     }
   }
 
 
   getImage(){
-    if(this.props.card.image_uris && this.state.image){
+    let card = this.getCardFace(this.props.card);
+    if(card.image_uris && this.state.image){
       return(
-        <img className="resize" src={this.props.card.image_uris.large} alt={this.props.card.name}></img>
+        <img className="resize" src={card.image_uris.large} alt={card.name}></img>
       )
     }
   }

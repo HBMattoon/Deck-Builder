@@ -16,6 +16,7 @@
       mergeImage: undefined,
       face: 0,
       needButton: false,
+      rotation: 0,
     }
   }
 
@@ -53,6 +54,7 @@
   updateCardImage(card, face){
     let image = '';
     let needButton = false;
+    let rotation = 0;
     if(this.state.mergeImage){
       //check if merged
       needButton = 'merge';
@@ -67,10 +69,19 @@
         image = card.card_faces[face].image_uris.large
         needButton = 'flip';
       }
+    } else if(card.layout === 'flip') {
+      needButton='rotate';
+      image = card.image_uris.large
+      if(face === 1){
+        rotation = 180;
+      } else {
+        rotation = 0;
+      }
+
     } else {
       image = card.image_uris.large
     }
-    this.setState({image, face, needButton});
+    this.setState({image, face, needButton, rotation});
   }
 
   slideButton(val){
@@ -114,7 +125,7 @@
     return (
       <div key={this.props.keyval} className="test" onMouseEnter={() => this.showFlip()} onMouseLeave={() => this.hideFlip()}>
         {this.getButton(this.state.needButton)}
-        <img onClick={() => this.props.clickedCard(this.state.card)} className="cards" src={distractionMode ? cardBG : this.state.image}></img>
+        <img onClick={() => this.props.clickedCard(this.state.card)} className={`cards rotate${this.state.rotation}`} src={distractionMode ? cardBG : this.state.image}></img>
       </div>
     )
   }
