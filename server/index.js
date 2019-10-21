@@ -3,7 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const limiter = require('express-rate-limit')
 // const { findCard } = require('./controller/mtgFinder.js')
-const { checkHist, createDeck } = require('./controller/database.js');
+const { checkHist, createDeck, getDeck } = require('./controller/database.js');
 const { newFindCard } = require('./controller/mtgFinder.js');
 
 const rateLimit = require("express-rate-limit");
@@ -36,7 +36,17 @@ app.get('/api/mtg',(req, res) =>{
 });
 
 app.get('/api/deck',(req, res) => {
-
+  let user_id = req.query.id;
+  console.log('user_id is: ', user_id);
+  getDeck(user_id, (err, result)=>{
+    if(err){
+      console.log('error in deck api request: ', err);
+      res.end();;
+    } else {
+      console.log('Decklist is: ', result);
+      res.send(result).end();
+    }
+  })
 })
 
 

@@ -20,6 +20,7 @@ const idGen = () => {
   return result
 }
 
+//ADD NEW DECK TO DATABASE
 const createDeck = (deck, cb) =>{
   let id = idGen();
   let JSONsearchParams = JSON.stringify(deck)
@@ -49,7 +50,27 @@ const deleteDeck = (id, cb) =>{
 
 }
 
-const loadDeck = (id, cb) =>{
+//RETRIEVE DECK FROM DATABASE USING ID
+const getDeck = (id, cb) =>{
+  //query database for given user_id
+  console.log('getting deck with id: ', id);
+
+  client.query(`select exists(select * from decks where owner_id = UPPER('${id}'))`)
+  .then(res => {
+    if(res.rows[0].exists){
+      console.log('deck exists!!!!');
+      client.query(`select deck_list from decks where owner_id = UPPER('${id}')`)
+      .then(res => {
+        console.log('deck contents is: ', res.rows[0])
+        cb(null, res);
+      })
+      .catch(err => cb(err, null))
+    }
+  })
+
+  //check if db actually holds a deck with the given user_id
+  //if doesnt exits, return some type of error msg,
+  //otherwise return data
 
 }
 
@@ -98,5 +119,6 @@ const addHist = (searchParams, results) => {
 
 module.exports = {
   checkHist,
-  createDeck
+  createDeck,
+  getDeck,
 }
