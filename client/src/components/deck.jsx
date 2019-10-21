@@ -6,7 +6,9 @@ class Deck extends React.Component {
     super(props)
     this.state={
       cards: [],
+      value: this.props.currentId
     }
+    this.updateValue = this.updateValue.bind(this);
   }
 
   // componentDidMount(){
@@ -20,6 +22,8 @@ class Deck extends React.Component {
   // }
 
   //TODO
+  //show correct tabs for flip/split/merge cards
+
   manaParse(card){
     if(card.mana_cost){
       let manaStr = card.mana_cost
@@ -102,14 +106,19 @@ class Deck extends React.Component {
 
   }
 
+  updateValue(){
+    console.log('updating value with: ', this.props.currentId)
+    this.setState({value: this.props.currentId});
+  }
+
   render(){
     return(
       <div className="deckList">
         <div className="buttonZone">
-          <button onClick={()=> this.props.saveDeck()}>Save Deck</button>
-          <button>Load Deck</button>
+          <button onClick={()=> this.props.saveDeck( null, () => this.updateValue() )}>Save Deck</button>
+          <button onClick={() => this.props.loadDeck(this.state.value)}>Load Deck</button>
           <label>
-            <input type="text" id="deckId" placeholder={this.props.currentId}></input>
+            <input type="text" id="deckId" placeholder="enter deck ID" value ={this.state.value.slice(1,this.state.value.length - 1)} onChange={e => this.setState({value: e.target.value})}></input>
           </label>
           <button className="floatRight">Delete Deck</button>
         </div>
