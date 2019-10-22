@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchBar from './components/search_bar.jsx';
 import Display from './components/display.jsx';
+import PageBar from './components/page_bar.jsx';
 
 
 
@@ -10,6 +11,9 @@ class App extends React.Component {
     this.state = {
       currentSearch: '',
       searchResult: [],
+      allCard:[],
+      page: 1,
+      totalRes: 0,
 
     };
     //functions
@@ -45,8 +49,9 @@ class App extends React.Component {
       console.log('is array? ' + Array.isArray(cards));
       this.setState({
         'currentSearch':query,
-        'searchResult':cards.data.slice(0, 25)
-        //page size = 25
+        'searchResult':cards.data.slice(0, 25), //pg size 25
+        'allCard': cards.data,
+        'totalRes': cards.total_cards,
       });
       //console.log(cards[0].text)
     })
@@ -59,7 +64,7 @@ class App extends React.Component {
       <div>
         <SearchBar getCard={this.getCard}/>
         <Display cards={this.state.searchResult}/>
-
+        <PageBar cardNum={this.state.totalRes} currentPage ={this.state.page}/>
       </div>
     );
   }
