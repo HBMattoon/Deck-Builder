@@ -15,17 +15,20 @@ class PageBar extends React.Component{
     let page = this.props.currentPage;
     let buttons = [];
     for(let x = 0; x < pages; x++){
-      buttons.push(<button>push to get:{x}</button>);
+      buttons.push(<button onClick={() => this.props.cardRange(x+1)}>push to get:{x}</button>);
     }
+
+
+
     if(page < 4){
-      console.log('getting first seven');
+      //console.log('getting first seven');
       buttons = buttons.slice(0,7);
-    } else if(page > (pages - 3)){
-      buttons = buttons.slice((pages - 7), pages);
-      console.log('getting last seven');
+    } else if(page >= (pages - 3)){
+      buttons = buttons.slice(pages - 7 < 0 ? 0 :(pages - 7), pages);
+      //console.log('getting last seven');
     } else {
-      console.log('getting seven');
-      buttons = buttons.slice(page - 3, page + 3);
+      //console.log('getting seven');
+      buttons = buttons.slice(page - 4, page + 3);
     }
     return buttons
   }

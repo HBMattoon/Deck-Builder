@@ -18,6 +18,7 @@ class App extends React.Component {
     };
     //functions
     this.getCard = this.getCard.bind(this);
+    this.updateCardRange = this.updateCardRange.bind(this);
 
   }
 
@@ -28,6 +29,16 @@ class App extends React.Component {
       'page':1,
       'pageSize':20,
     });
+  }
+
+  updateCardRange(page){
+    let upperRange = 25 * page;
+    let lowerRange = upperRange - 25
+    let newSearchResults = this.state.allCard.slice(lowerRange, upperRange)
+    this.setState({
+      'page':page,
+      'searchResult':newSearchResults,
+    })
   }
 
   getCard(query){
@@ -64,7 +75,7 @@ class App extends React.Component {
       <div>
         <SearchBar getCard={this.getCard}/>
         <Display cards={this.state.searchResult}/>
-        <PageBar cardNum={this.state.totalRes} currentPage ={this.state.page}/>
+        <PageBar cardRange={this.updateCardRange} cardNum={this.state.totalRes} currentPage ={this.state.page}/>
       </div>
     );
   }
