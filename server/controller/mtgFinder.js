@@ -30,26 +30,35 @@ const queryTranslator = (query) => {
 //c%3Awhite+cmc%3D1
 
 //TODO need to creat query generator/translater function based off of search terms
-const newFindCard = (searchTerms, cb) => {
+const newFindCard = (searchTerms, cb, nextURL) => {
 
+  let searchURL;
   console.log(searchTerms);
-
-  let searchURL = `https://api.scryfall.com/cards/search?q=${queryTranslator(searchTerms)}`
+  if(nextURL){
+    searchURL = nextURL;
+  } else {
+    searchURL = `https://api.scryfall.com/cards/search?q=${queryTranslator(searchTerms)}`
+  }
   console.log(searchURL);
   fetch(searchURL)
   .then(res => res.json())
   .then(res => {
-    console.log(res);
+    console.log('number of cards being return: ', res.data.length);
     //TODO all results should be gotten here and passed as a batch to callback
+    //if there are mor pages,
+    //wait 100 miliseconds then call db for next page
 
 
 
-
-
-    res = JSON.stringify(res);
+    //res = JSON.stringify(res);
     cb(null, res);
+
   })
   .catch(err => cb(err,null));
+}
+
+const getNextPage = (pageURL) => {
+
 }
 
 module.exports = {

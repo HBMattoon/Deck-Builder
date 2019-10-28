@@ -77,7 +77,7 @@ const getDeck = (id, cb) =>{
 
 //TODO use HIST to get specific searches if more general searches have been done
 //ie: if 'cats' is in hist then use hist to find 'black cats'
-const checkHist = (searchParams, callback) => {
+const checkHist = (searchParams, callback, nextURL) => {
   let JSONsearchParams = JSON.stringify(searchParams)
   console.log('searching: ' + JSONsearchParams);
   client.query(`select exists(select * from searchHist where query = $$${JSONsearchParams}$$)`)
@@ -92,15 +92,37 @@ const checkHist = (searchParams, callback) => {
       })
       //.catch(err => console.log('error in checkHist: ', err))
 
-    } else {
+
+    }else {
 
       console.log('getting from api')
       //using new find card function using scryfall instad of mtg-api
       newFindCard(searchParams, (err, result) => {
         if(err) console.log(err);
+        //console.log(result)
+        if(result.has_more){
+          console.log('there are more entries')
+          //console.log('does it have more>?   ',result.has_more)
+          //console.log('and the keys are ', Object.keys(result));
+          //console.log('and the next page is: ', result.next_page )
+          let next_page = result.next_page
+          // searchParams.page = searchParams.page + 1;
+          let newSearchParams = Object.assign({}, searchParams);
+          newSearchParams.page++;
+          setTimeout(()=>{
+            //dont add callback because next pages wont need to be returned yet
+            console.log('getting ', next_page )
+            checkHist(newSearchParams, null, next_page);
+
+          }, 5000);
+          //console.log('getting page: ', ++searchTerms.page)
+        }
+        result = JSON.stringify(result);
         addHist(searchParams, result);
-        callback(null, result);
-      });
+        if(callback){
+          callback(null, result);
+        }
+      }, nextURL);
 
     }
   })
@@ -109,6 +131,7 @@ const checkHist = (searchParams, callback) => {
 }
 
 const addHist = (searchParams, results) => {
+  console.log('adding to hist: ',searchParams);
   let JSONsearchParams = JSON.stringify(searchParams)
   client.query(`insert into searchHist (query, response) values ($$${JSONsearchParams}$$, $$${results}$$)`)
   .then(()=> console.log('added to history'))
